@@ -12,29 +12,29 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class TaskActivity extends AppCompatActivity {
-    TextView tv, date, priority;
+    TextView tvName, tvDate, tvPriority;
+    final static public String NAME_KEY = "Name";
+    Bundle bundle;
+   ArrayList<Task> tasks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
 
-        tv = findViewById(R.id.textViewName);
-        date = findViewById(R.id.textViewDate);
-        priority = findViewById(R.id.textViewStatus);
+        tvName = findViewById(R.id.textViewName);
+        tvDate = findViewById(R.id.textViewDate);
+        tvPriority = findViewById(R.id.textViewStatus);
 
-      if (getIntent() != null && getIntent().getExtras() != null && getIntent().hasExtra(MainActivity.TASKS_KEY)){
-          //String name = getIntent().getStringExtra(MainActivity.NAME_KEY);
-          //Task task = (Task) getIntent().getSerializableExtra(MainActivity.TASK_KEY);
+        Bundle b = getIntent().getExtras();
+        String taskName = b.getString(MainActivity.TASKNAME_KEY);
+        String date = b.getString(MainActivity.DATE_KEY);
+        int priority = b.getInt(MainActivity.PRIORITY_KEY);
 
-          ArrayList<Task> tasks = ( ArrayList<Task>) getIntent().getSerializableExtra(MainActivity.TASKS_KEY);
-          Collections.shuffle(tasks);
-          Task task = tasks.get(0);
-          tv.setText(task.taskName);
-          date.setText(task.date);
-          priority.setText(String.valueOf(task.priority));
-
-      }
+        tvName.setText(MainActivity.TASKNAME_KEY + taskName);
+        tvDate.setText(MainActivity.DATE_KEY + date);
+        tvPriority.setText(MainActivity.PRIORITY_KEY + priority);
 
       findViewById(R.id.taskCancelButton).setOnClickListener(new View.OnClickListener() {
           @Override
@@ -45,5 +45,4 @@ public class TaskActivity extends AppCompatActivity {
       });
 
     }
-
 }

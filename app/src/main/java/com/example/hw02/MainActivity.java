@@ -1,5 +1,9 @@
 package com.example.hw02;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -24,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
     final static public String NAME_KEY = "Name";
     final static public String TASK_KEY = "Task";
     final static public String TASKS_KEY = "Tasks";
-    TextView numTasks, currentTask, taskDate, priorityStatus;
+    final static public String TASKNAME_KEY = "Name: ";
+    final static public String DATE_KEY = "Date: ";
+    final static public String PRIORITY_KEY = "Priority: ";
+
+    public static final int RED_CODE = 100;
+    TextView numTasks, currentTask, taskDate, priorityStatus, upcoming, textView;
     ArrayList<Task> tasks;
     ListView lv;
     ArrayAdapter<Task> adapterTask;
@@ -41,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         tasks.add(new Task("Name of Task 4", "02/01/2022", 3));
         tasks.add(new Task("Name of Task 5", "02/01/2022", 1));
 
-        lv = findViewById(R.id.taskListView);
 
         currentTask = findViewById(R.id.currentTask);
         currentTask.setText(String.valueOf(tasks.get(0).taskName));
@@ -55,71 +63,34 @@ public class MainActivity extends AppCompatActivity {
         priorityStatus = findViewById(R.id.priortyStatus);
         priorityStatus.setText(String.valueOf(tasks.get(0).getPriority()));
 
-
         findViewById(R.id.viewButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
+                builderSingle.setTitle("Select Task");
+                //lv = findViewById(R.id.taskListView);
                 adapterTask = new ArrayAdapter<>(MainActivity.this, android.R.layout.select_dialog_item, android.R.id.text1, tasks);
-                builder.setTitle("Select Task");
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setAdapter(adapterTask, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builderInner = new AlertDialog.Builder(MainActivity.this);
-                        builderInner.setTitle("Your Selected Item is");
-                        builderInner.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                builderSingle.setAdapter(adapterTask, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                                        Intent intent = new Intent(MainActivity.this, TaskActivity.class);
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                Task task = tasks.get(which);
 
-                                    }
-                                });
+                                String taskName = task.getTaskName();
+                                String date = task.getDate();
+                                int priority = task.getPriority();
 
+                                Bundle b = new Bundle();
+                                b.putString(TASKNAME_KEY, taskName);
+                                b.putString(DATE_KEY, date);
+                                b.putInt(PRIORITY_KEY, priority);
+
+                                Intent intent = new Intent(MainActivity.this, TaskActivity.class);
+                                intent.putExtras(b);
+                                startActivity(intent);
                             }
                         });
-                        builderInner.show();
-                    }
-                });
-                builder.show();
-
-
-
-             //   ArrayAdapter<Task> tasks = new ArrayAdapter<Task>(MainActivity.this, android.R.layout.select_dialog_item, tasks);
-//                builder.setMessage(tasks.toString(), );
-//                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        dialogInterface.cancel();
-////                        Intent intent = new Intent(MainActivity.this, TaskActivity.class);
-////                        intent.putExtra(TASK_KEY, new Task("First Task", "02/02/2022", 1));
-////
-////                        ArrayList<Task> tasks = new ArrayList<>();
-////                        tasks.add(new Task("Do Homework", "02/01/2022", 1));
-////                        tasks.add(new Task("Name of Task 2", "02/01/2022", 2));
-////                        tasks.add(new Task("Name of Task 3", "02/01/2022", 1));
-////                        tasks.add(new Task("Name of Task 4", "02/01/2022", 3));
-////                        tasks.add(new Task("Name of Task 5", "02/01/2022", 1));
-////                        intent.putExtra(TASKS_KEY, tasks);
-////                        startActivity(intent);
-//                    }
-//                });
-
+                builderSingle.show();
             }
         });
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d(TAG, "onActivityResult: ");
     }
 }
