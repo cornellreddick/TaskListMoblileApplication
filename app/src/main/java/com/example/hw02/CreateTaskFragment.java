@@ -13,9 +13,14 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -25,7 +30,12 @@ public class CreateTaskFragment extends Fragment {
     TextView tvDate;
     int year;
     int month;
-    int dayOfMonth;
+    int day;
+    ArrayList<Task> tasks;
+    ListView lv;
+    ArrayAdapter<Task> adapterTask;
+    EditText editText;
+    RadioGroup radioGroup;
     public CreateTaskFragment() {
         // Required empty public constructor
     }
@@ -49,13 +59,15 @@ public class CreateTaskFragment extends Fragment {
           @Override
           public void onClick(View view) {
              Calendar calendar = Calendar.getInstance();
+              month = calendar.get(Calendar.MONTH);
+              day = calendar.get(Calendar.DAY_OF_MONTH);
               year = calendar.get(Calendar.YEAR);
               DatePickerDialog dp = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    tvDate.setText(day + "/" + month + "/" + year);
+                    tvDate.setText(month + "/" + day + "/" + year);
                 }
-            }, 0, 0, 0);
+            }, 2022, 2, 1);
              dp.show();
           }
       });
@@ -71,9 +83,31 @@ public class CreateTaskFragment extends Fragment {
         view.findViewById(R.id.createCancelSubmitButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addTask = new Intent(getActivity(), ToDoListFragment.class);
-                int requestCode = 1;
-                startActivityForResult(addTask, requestCode);
+                editText = editText.findViewById(R.id.createName);
+                String taskName = editText.getText().toString();
+//
+//                radioGroup = radioGroup.findViewById(R.id.radioGroup).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                    }
+  //              });
+
+                Task task = new Task(taskName,tvDate.toString(),1  );
+                ToDoListFragment.tasks.add(task);
+//                        tasks = new ArrayList<>();
+//                        String taskName = task.getTaskName();
+//                        String date = task.getDate();
+//                        int priority = task.getPriority();
+//
+//                        Bundle b = new Bundle();
+//                        b.putString(ToDoListFragment.TASKNAME_KEY, taskName);
+//                        b.putString(ToDoListFragment.DATE_KEY, date);
+//                        b.putInt(ToDoListFragment.PRIORITY_KEY, priority);
+//
+//                        Intent intent = new Intent(getActivity(), TaskActivity.class);
+//                        intent.putExtras(b);
+//                        startActivity(intent);
             }
         });
 

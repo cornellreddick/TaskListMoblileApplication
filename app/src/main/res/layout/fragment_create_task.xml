@@ -46,19 +46,19 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/high"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/highRadiobtn" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/mediumRadiobtn" />
 
         <RadioButton
-            android:id="@+id/lowRadioButton"
+            android:id="@+id/low"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/low" />
@@ -73,7 +73,7 @@
         android:layout_marginRight="32dp"
         android:text="@string/createSetDateLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintTop_toBottomOf="@+id/createName" />
 
     <Button
         android:id="@+id/createTaskCancelButton"
@@ -97,7 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/createName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

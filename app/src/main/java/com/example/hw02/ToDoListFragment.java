@@ -30,7 +30,7 @@ public class ToDoListFragment extends Fragment {
     final static public String DATE_KEY = "Date: ";
     final static public String PRIORITY_KEY = "Priority: ";
     TextView numTasks, currentTask, taskDate, priorityStatus, upcoming, textView;
-    ArrayList<Task> tasks;
+    public static ArrayList<Task> tasks;
     ListView lv;
     ArrayAdapter<Task> adapterTask;
 
@@ -53,6 +53,10 @@ public class ToDoListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_display, container, false);
+
+
+
+
         tasks = new ArrayList<>();
         tasks.add(new Task("Do Homework", "02/01/2022",1));
         tasks.add(new Task("Name of Task 2", "02/02/2022", 2));
