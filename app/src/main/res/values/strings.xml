@@ -19,4 +19,14 @@
     <string name="dateDisplay">02/02/2022</string>
     <string name="priorityLabel">Priority:</string>
     <string name="priorityDisplay">Status</string>
+
+    <string name="createNameLabel">Name:</string>
+    <string name="createNameHint">Task Name</string>
+    <string name="createDateLabel">Date:</string>
+    <string name="createSetDateLabel">Set date</string>
+    <string name="createPriorityLabel">Priority:</string>
+    <string name="highRadiobtn">High</string>
+    <string name="mediumRadiobtn">Medium</string>
+    <string name="low">Low</string>
+    <string name="submint">Submit</string>
 </resources>

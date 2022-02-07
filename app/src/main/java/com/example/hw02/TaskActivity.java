@@ -1,8 +1,11 @@
 package com.example.hw02;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,14 +13,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 public class TaskActivity extends AppCompatActivity {
     TextView tvName, tvDate, tvPriority;
     final static public String NAME_KEY = "Name";
     Bundle bundle;
-   ArrayList<Task> tasks;
+    ArrayList<Task> tasks;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
