@@ -2,11 +2,15 @@ package com.example.hw02;
 
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Task implements Serializable {
     String taskName;
     String date;
     int priority;
+
+
 
     public Task(String taskName, String date, int priority) {
         this.taskName = taskName;
@@ -18,9 +22,7 @@ public class Task implements Serializable {
         this.taskName = taskName;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public void setDate(Calendar datetime) { this.date = date; }
 
     public void setPriority(int priority) {
         this.priority = priority;
@@ -30,13 +32,13 @@ public class Task implements Serializable {
         return taskName;
     }
 
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
 
     public int getPriority() {
         return priority;
     }
+
+
 
     @Override
     public String toString() {

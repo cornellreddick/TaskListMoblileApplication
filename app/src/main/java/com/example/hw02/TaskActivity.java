@@ -8,7 +8,11 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +24,8 @@ public class TaskActivity extends AppCompatActivity {
     final static public String NAME_KEY = "Name";
     Bundle bundle;
     ArrayList<Task> tasks;
-
+    ArrayAdapter<Task> adapterTask;
+    ListView lv;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -48,6 +53,18 @@ public class TaskActivity extends AppCompatActivity {
               startActivity(intent);
           }
       });
+       // lv.findViewById(R.id.view);
+        adapterTask = new ArrayAdapter<>(TaskActivity.this, android.R.layout.select_dialog_item, android.R.id.text1, tasks);
+        findViewById(R.id.taskDeleteButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(TaskActivity.this, ToDoListFragment.class);
+                startActivity(intent);
+
+
+            }
+        });
 
     }
 }

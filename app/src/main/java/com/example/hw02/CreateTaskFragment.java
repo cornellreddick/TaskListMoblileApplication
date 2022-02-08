@@ -1,10 +1,7 @@
 package com.example.hw02;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,12 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class CreateTaskFragment extends Fragment {
 
@@ -31,11 +29,15 @@ public class CreateTaskFragment extends Fragment {
     int year;
     int month;
     int day;
+    String userInput;
     ArrayList<Task> tasks;
     ListView lv;
     ArrayAdapter<Task> adapterTask;
     EditText editText;
     RadioGroup radioGroup;
+    RadioButton radioButton;
+    int radioButtonCheck;
+    int Results;
     public CreateTaskFragment() {
         // Required empty public constructor
     }
@@ -50,10 +52,41 @@ public class CreateTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_create_task, container, false);
+
+        view.findViewById(R.id.createSubmitButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        editText = (EditText) view.findViewById(R.id.createName);
+        editText.getText().toString();
+
+
+
+        radioGroup = (RadioGroup)view.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checked) {
+                 radioButtonCheck = radioGroup.getCheckedRadioButtonId();
+
+                    if (checked == R.id.high) {
+                        Results = 3;
+                    } else if (checked == R.id.medium) {
+                        Results = 2;
+                    } else if (checked == R.id.low) {
+                        Results = 1;
+                    } else {
+                        Toast.makeText(getContext(), "Please Select a radio button!", Toast.LENGTH_SHORT).show();
+                    }
+
+            }
+        });
 
         final Calendar myCalendar= Calendar.getInstance();
         // Inflate the layout for this fragment
-      View view = inflater.inflate(R.layout.fragment_create_task, container, false);
+
       tvDate = view.findViewById(R.id.testDAte);
       view.findViewById(R.id.setDateButton).setOnClickListener(new View.OnClickListener() {
           @Override
@@ -80,34 +113,22 @@ public class CreateTaskFragment extends Fragment {
                     .commit();
         }
     });
-        view.findViewById(R.id.createCancelSubmitButton).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.createSubmitButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editText = editText.findViewById(R.id.createName);
-                String taskName = editText.getText().toString();
-//
-//                radioGroup = radioGroup.findViewById(R.id.radioGroup).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                    }
-  //              });
 
-                Task task = new Task(taskName,tvDate.toString(),1  );
-                ToDoListFragment.tasks.add(task);
-//                        tasks = new ArrayList<>();
-//                        String taskName = task.getTaskName();
-//                        String date = task.getDate();
-//                        int priority = task.getPriority();
-//
-//                        Bundle b = new Bundle();
-//                        b.putString(ToDoListFragment.TASKNAME_KEY, taskName);
-//                        b.putString(ToDoListFragment.DATE_KEY, date);
-//                        b.putInt(ToDoListFragment.PRIORITY_KEY, priority);
-//
-//                        Intent intent = new Intent(getActivity(), TaskActivity.class);
-//                        intent.putExtras(b);
-//                        startActivity(intent);
+                if (editText.getText().toString().matches("") || tvDate.getText().toString().matches("") || radioGroup.getCheckedRadioButtonId() == -1 ) {
+                    Toast.makeText(getActivity(), "Please select date, radio button, or add Task name!!", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.containerView, new ToDoListFragment())
+                            .commit();
+                }
+
+                tasks = new ArrayList<>();
+                tasks.add(new Task(editText.toString(),tvDate.toString(), Results ));
+
             }
         });
 

@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,8 +20,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 
 public class ToDoListFragment extends Fragment {
@@ -29,6 +41,8 @@ public class ToDoListFragment extends Fragment {
     final static public String TASKNAME_KEY = "Name: ";
     final static public String DATE_KEY = "Date: ";
     final static public String PRIORITY_KEY = "Priority: ";
+    final static public String DATE_FORMAT = "MM/dd/yyyy";
+    final static public String Id = "id";
     TextView numTasks, currentTask, taskDate, priorityStatus, upcoming, textView;
     public static ArrayList<Task> tasks;
     ListView lv;
@@ -44,27 +58,46 @@ public class ToDoListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
 
+    public String generateRandomDate(){
+        Random r = new Random();
+        Calendar c = java.util.Calendar.getInstance();
+        c.set(Calendar.MONTH, Math.abs(r.nextInt()) % 12);
+        c.set(Calendar.DAY_OF_MONTH, Math.abs(r.nextInt()) % 30);
+        c.setLenient(true);
+        return DATE_FORMAT.format(c.getTime().toString());
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_display, container, false);
 
-
-
-
         tasks = new ArrayList<>();
-        tasks.add(new Task("Do Homework", "02/01/2022",1));
-        tasks.add(new Task("Name of Task 2", "02/02/2022", 2));
-        tasks.add(new Task("Name of Task 3", "02/03/2022", 1));
-        tasks.add(new Task("Name of Task 4", "02/04/2022", 3));
-        tasks.add(new Task("Name of Task 5", "02/05/2022", 1));
+        tasks.add(new Task("Do Homework","02/07/2022",1));
+        tasks.add(new Task("Name of Task 2","02/09/2022", 2));
+        tasks.add(new Task("Name of Task 3","02/05/2022" , 1));
+        tasks.add(new Task("Name of Task 4","02/03/2022", 3));
+        tasks.add(new Task("Name of Task 5","02/02/2022" , 1));
 
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task t1, Task t2) {
+                return t1.getDate().compareTo(t2.getDate());
+            }
+        });
 
+        Collections.sort(tasks, new Comparator<Task>() {
+            public int compare(Task o1, Task o2) {
+                if (o1.getDate() == null || o2.getDate() == null)
+                    return 0;
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
 
         currentTask = view.findViewById(R.id.currentTask);
         currentTask.setText(String.valueOf(tasks.get(0).taskName));
@@ -73,7 +106,7 @@ public class ToDoListFragment extends Fragment {
         numTasks.setText(String.valueOf(tasks.size()));
 
         taskDate = view.findViewById(R.id.taskDate);
-        taskDate.setText(String.valueOf(tasks.get(0).getDate()));
+        taskDate.setText(tasks.get(0).getDate());
 
         priorityStatus = view.findViewById(R.id.priortyStatus);
         priorityStatus.setText(String.valueOf(tasks.get(0).getPriority()));
@@ -89,7 +122,6 @@ public class ToDoListFragment extends Fragment {
 
                     }
                 });
-                //lv = findViewById(R.id.taskListView);
                 adapterTask = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item, android.R.id.text1, tasks);
                 builderSingle.setAdapter(adapterTask, new DialogInterface.OnClickListener() {
                             @Override
@@ -123,7 +155,8 @@ public class ToDoListFragment extends Fragment {
                     }
                 });
 
-
         return  view;
     }
+
+
 }
