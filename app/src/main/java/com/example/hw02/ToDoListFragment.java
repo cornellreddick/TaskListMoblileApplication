@@ -151,6 +151,7 @@ public class ToDoListFragment extends Fragment {
                     public void onClick(View view) {
                         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.containerView, new CreateTaskFragment())
+                                .addToBackStack(null)
                                 .commit();
                     }
                 });

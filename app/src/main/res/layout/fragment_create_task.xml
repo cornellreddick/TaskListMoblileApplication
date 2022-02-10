@@ -121,4 +121,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createTaskCancelButton" />
 
+    <TextView
+        android:id="@+id/priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/priority"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="692dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

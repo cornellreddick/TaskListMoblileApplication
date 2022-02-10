@@ -53,18 +53,29 @@ public class TaskActivity extends AppCompatActivity {
               startActivity(intent);
           }
       });
-       // lv.findViewById(R.id.view);
-        adapterTask = new ArrayAdapter<>(TaskActivity.this, android.R.layout.select_dialog_item, android.R.id.text1, tasks);
+
         findViewById(R.id.taskDeleteButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(TaskActivity.this, ToDoListFragment.class);
+                // lv.findViewById(R.id.view);
+        adapterTask = new ArrayAdapter<>(TaskActivity.this, android.R.layout.select_dialog_item, android.R.id.text1, tasks);
+        lv.setAdapter(adapterTask);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Task task = tasks.get(position);
+                adapterTask.remove(task);
+                adapterTask.notifyDataSetChanged();
+            }
+        });
+            Intent intent = new Intent(TaskActivity.this, ToDoListFragment.class);
                 startActivity(intent);
-
 
             }
         });
 
     }
+
+
 }
