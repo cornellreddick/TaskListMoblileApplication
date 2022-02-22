@@ -24,8 +24,9 @@ public class TaskActivity extends AppCompatActivity {
     final static public String NAME_KEY = "Name";
     Bundle bundle;
     ArrayList<Task> tasks;
-    ArrayAdapter<Task> adapterTask;
+    public static ArrayAdapter<Task> adapterTask;
     ListView lv;
+    public static int deletePos;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -57,18 +58,9 @@ public class TaskActivity extends AppCompatActivity {
         findViewById(R.id.taskDeleteButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // lv.findViewById(R.id.view);
-        adapterTask = new ArrayAdapter<>(TaskActivity.this, android.R.layout.select_dialog_item, android.R.id.text1, tasks);
-        lv.setAdapter(adapterTask);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Task task = tasks.get(position);
-                adapterTask.remove(task);
-                adapterTask.notifyDataSetChanged();
-            }
-        });
+                int d = ToDoListFragment.deletePos;
+                ToDoListFragment.tasks.remove(d);
+                ToDoListFragment.adapterTask.notifyDataSetChanged();
             Intent intent = new Intent(TaskActivity.this, ToDoListFragment.class);
                 startActivity(intent);
 

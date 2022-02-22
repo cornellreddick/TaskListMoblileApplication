@@ -26,9 +26,11 @@ import com.example.hw02.databinding.FragmentCreateTaskBinding;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class CreateTaskFragment extends Fragment {
+public class CreateTaskFragment extends Fragment implements ToDoListFragment.AddItem {
     FragmentCreateTaskBinding binding;
-
+    final static public String CREATE_TASKNAME_KEY = "Name";
+    final static public String CREATE_DATE_KEY = "Date";
+    final static public String CREATE_PRIORITY_KEY = "Priority";
     DatePickerDialog dp;
     TextView tvDate,  priority;
     int year;
@@ -83,7 +85,7 @@ public class CreateTaskFragment extends Fragment {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                                tvDate.setText(month + "/" + day + "/" + year);
+                                tvDate.setText(month +1 + "/" + day + "/" + year);
                             }
                         },
                         2022,
@@ -96,20 +98,21 @@ public class CreateTaskFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 int checked = radioGroup.getCheckedRadioButtonId();
-                 String value;
-                 int result = 0;
+                int result = 0;
+                int value = 0;
                 if (checked == R.id.high) {
-                    value = "3";
-                    result = Integer.parseInt(value);
+                    value = 3;
+                    result = value;
                 } else if (checked == R.id.medium) {
-                    value = "2";
-                    result = Integer.parseInt(value);
+                    value = 2;
+                    result = value;
                 } else if (checked == R.id.low) {
-                    value = "1";
-                    result = Integer.parseInt(value);
+                    value = 1;
+                    result = value;
                 } else {
-                    Toast.makeText(getContext(), "Please Select a radio button!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please Select a radio button!", Toast.LENGTH_SHORT).show();
                 }
+
 
                 if (tvDate.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please select date!!", Toast.LENGTH_SHORT).show();
@@ -121,8 +124,21 @@ public class CreateTaskFragment extends Fragment {
                 {
                     String date = tvDate.getText().toString();
                     String taskName = editText.getText().toString();
+                    int priority = result;
 
-                    tasks.add(new Task(taskName,date, result));
+
+                    CreateTaskFragment createTaskFragment = new CreateTaskFragment();
+                    Bundle b = new Bundle();
+                    b.putString(CREATE_TASKNAME_KEY, taskName);
+                    b.putString(CREATE_DATE_KEY, date);
+                    b.putInt(CREATE_PRIORITY_KEY, priority);
+                    createTaskFragment.setArguments(b);
+
+                    addToList(taskName, date, priority);
+
+
+                    tasks.add(new Task(taskName, date, priority));
+
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.containerView, new ToDoListFragment())
                             .addToBackStack(null)
@@ -140,5 +156,12 @@ public class CreateTaskFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+    ToDoListFragment.AddItem addItem;
+    @Override
+    public void addToList(String name, String date, int prority) {
+        tasks.add(new Task(name, date, prority));
+        adapterTask.notifyDataSetChanged();
+
     }
 }

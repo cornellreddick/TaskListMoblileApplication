@@ -43,11 +43,11 @@ public class ToDoListFragment extends Fragment {
     final static public String PRIORITY_KEY = "Priority: ";
     final static public String DATE_FORMAT = "MM/dd/yyyy";
     final static public String Id = "id";
-    TextView numTasks, currentTask, taskDate, priorityStatus, upcoming, textView;
+    TextView numTasks, currentTask, taskDate, priorityStatus;
     public static ArrayList<Task> tasks;
     ListView lv;
-    ArrayAdapter<Task> adapterTask;
-
+    public static ArrayAdapter<Task> adapterTask;
+    public static int deletePos;
 
     public ToDoListFragment() {
         // Required empty public constructor
@@ -158,6 +158,10 @@ public class ToDoListFragment extends Fragment {
 
         return  view;
     }
+    AddItem addItem;
 
+    interface AddItem{
+        void addToList(String name, String date, int prority);
+    }
 
 }
